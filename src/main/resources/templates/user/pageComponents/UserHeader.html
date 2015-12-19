@@ -1,0 +1,29 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+      
+ 	<body>
+  
+	   	<div th:fragment="copy">
+	    	
+	    	<div id="header" class="header">
+			
+				<div>
+					
+					<img alt="Webs Optimization Logo" title="Webs Optimization" th:src="@{/img/woss_logo.png}" th:alt-title="#{title.application}" />
+				
+				</div>
+				
+				<!-- navigation links -->
+				<h2>
+					
+					<a th:href="@{/user/UserDashboard}"><button>Dashboard</button></a> | <a th:href="@{/logout}"><button>Logout</button></a> | <a th:href="@{/user/changePassword}"><button>Change Password</button></a> 
+		      	
+		      	</h2>
+	      	
+	      	</div>
+	      	
+		</div>
+
+	</body>
+
+</html>

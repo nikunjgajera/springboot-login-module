@@ -1,0 +1,31 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+      
+  <body>
+  
+    	<div th:fragment="copy">
+    	
+	    	<div>
+				
+				<img alt="Woss logo" title="Woss logo" th:src="@{/img/woss_logo.png}" th:alt-title="#{title.application}" />
+			
+			</div>
+			
+			<!-- navigation links -->
+			<h2>
+				
+				<a th:href="@{/index}"><button>Home>>></button></a> | 
+		      	
+		      	<a th:href="@{/login}"><button>Access>>></button></a> | 
+		      	
+		      	<a th:href="@{/register}"><button>Register>>></button></a>
+		      	
+		      	<a th:href="@{/task/due/27/1/46}"><button>Secured>>></button></a> 
+	      	
+	      	</h2>
+      
+		</div>
+
+	</body>
+
+</html>

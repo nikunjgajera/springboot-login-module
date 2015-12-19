@@ -1,0 +1,33 @@
+<html xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:th="http://www.thymeleaf.org" 
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ layout:decorator="user/UserSiteLayout" >
+
+<body>
+	
+	<section layout:fragment="content">
+		
+		<script th:src="@{/js/user/UserFunctions.js}"></script> 
+		
+		<div class="container">
+		 
+		 	<fieldset class="container">
+          
+          		<legend>Dashboard</legend>
+		 		
+		 		Hello <span th:text="${username}"></span>
+		 		
+		 		<div class="sub-container">
+		 		
+		 			<!-- data -->
+		 		
+		 		</div>
+		 		
+			</fieldset>
+     	
+     	</div>
+    	
+    </section>
+    
+</body>
+</html>

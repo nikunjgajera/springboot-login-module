@@ -1,0 +1,78 @@
+<html xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:th="http://www.thymeleaf.org" 
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ layout:decorator="AnnonymousLayout" >
+<body>
+	<section layout:fragment="content">
+		
+	      <form action="#" id="registrationForm" th:action="@{/register}" method="post" th:object="${user}">
+	    
+	        <fieldset>
+	          
+	          <legend>Register</legend>
+				<!-- Error Message -->				
+				<ul th:if="${error != null}" class="errorlist">
+		            <li th:text="#{${error}}">Invalid Form</li>
+	          	</ul>
+
+				<!-- Success Message -->
+	          	<ul th:if="${succcess != null}" class="successlist">
+		            <li th:text="#{${succcess}}">Success</li>
+	          	</ul>
+				
+	          	<div>
+	            	<label class="fields" for="name"><span>Name</span></label>
+	            	<input type="text" placeholder="Name" th:field="*{name}" />
+	          	</div>
+	          
+	          	<div>
+	            	<label class="fields" for="email"><span>Email</span></label>
+	            	<input type="email" placeholder="Email" th:field="*{email}"  />
+	          	</div>
+	    		
+				<div>
+		            <label class="fields" for="password"><span>Password</span></label>
+		            <input type="password" placeholder="Password" th:field="*{password}" />
+	          	</div>
+	    		
+	    		<div>
+		            <label class="fields" for="re-assword"><span>Re-enter Password</span></label>
+		            <input type="password" id="repassword" name="repassword" placeholder="Re-enter Password"  />
+	          	</div>
+	    		
+	          	<div class="submit">
+	            	<button type="submit" name="Register">Register</button>    
+	          	</div>
+	        
+	        </fieldset>
+	          
+	      </form>
+     	 
+     	 <script type="text/javascript">
+	     	$(document).ready(function() { 
+		    	$("#registrationForm").validate({
+	    			rules: {
+			    	    name: "required",
+			    	    email: {
+			    	      required: true,
+			    	      email: true
+			    	    },
+			    	    password: "required",
+			    	    repassword:{
+			    	    	equalTo: "#password"
+			    	    }
+			    	  },
+			    	  messages: {
+			    	    name: "",
+			    	    email: {
+			    	      required: "",
+			    	      email: "Please enter valid email"
+			    	    },
+			    	    repassword: "Please enter the same password again"
+			    	  }
+	    			});
+		    	});
+		</script>
+    </section>
+</body>
+</html>

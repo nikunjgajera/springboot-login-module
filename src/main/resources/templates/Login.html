@@ -1,0 +1,68 @@
+<html xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:th="http://www.thymeleaf.org" 
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ layout:decorator="AnnonymousLayout" >
+<body>
+	
+	<section layout:fragment="content">
+		
+      <form id="loginForm" action="#" th:action="@{/login}" method="post">
+    
+        <fieldset>
+          
+          <legend>Login</legend>
+			
+			<ul th:if="${param.error != null}" class="errorlist">
+	            <li th:text="#{authentication.error}">Auth Error</li>
+          	</ul>
+          	
+          <div>
+            
+            <label class="fields" for="email"><span>Email</span></label>
+            <input type="email"  id="email" name="email" placeholder="Email" required="required"/>
+          
+          </div>
+          
+          <div>
+            
+            <label class="fields" for="Password"><span >Password</span></label>
+            <input type="password" id="password" name="password" placeholder="Password" required="required"/>
+          
+          </div>
+    
+          <div class="submit">
+          
+          	<button type="submit" name="login">Login</button>
+                
+          </div>
+        
+        </fieldset>
+          
+      </form>
+        <script type="text/javascript">
+	     	$(document).ready(function() {
+	     		
+	     		currentProjectId = 0;
+	     		
+		    	$("#loginForm").validate({
+					rules: {
+			    	    email: {
+			    	      required: true,
+			    	      email: true
+			    	    },
+			    	    password: "required"
+					},
+					messages: {
+			    	    email: {
+			    	      required: "",
+			    	      email: "Please enter valid email"
+			    	    },
+			    	    password: ""
+					}
+				});
+		    });
+		</script>
+    </section>
+    
+</body>
+</html>

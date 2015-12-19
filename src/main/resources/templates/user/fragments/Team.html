@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head></head>
+
+<body>
+    
+    <div th:fragment="Team" th:unless="${#lists.isEmpty(team)}" >
+      
+		<h3> Team </h3>
+		
+		<ul class="team">
+			
+			<li th:each="member: ${team}"><a th:id="${member.id}" href="#" th:onclick="'javascript:showMemberTask(\'' + ${member.id} +'\',\''+ ${projectId} + '\');'" ><span th:text="${member.name}"></span></a></li>
+			
+		</ul>
+		
+    </div>
+    
+</body>
+
+</html>

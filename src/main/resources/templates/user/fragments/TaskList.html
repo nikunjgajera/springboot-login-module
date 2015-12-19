@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head></head>
+
+<body>
+    
+    <div th:fragment="TaskList" class="tasklist">
+        
+        <div class="create-task" id="create-task">
+		 		
+ 			<button th:if="${projectId != 0}" th:onclick="'javascript:createTaskForm()'">Create [+]</button>
+ 			
+ 			<button th:if="${projectId != 0}" th:onclick="'javascript:showEditProjectForm()'">Edit [/]</button>
+ 			
+ 			<ul th:if="${error != null}" class="errorlist">
+			            
+	            <li th:text="#{${error}}">Error</li>
+          	
+          	</ul>
+          	
+          	<ul th:if="${success != null}" class="successlist">
+			            
+	            <li th:text="#{${success}}">Success</li>
+          	
+          	</ul>
+ 		
+ 		</div>
+        
+        <table>
+            
+            <thead>
+                
+                <tr th:if="${memberId == null}">
+                    
+                    <th><a href="#"><button th:onclick="'javascript:listActiveTask(\''+${projectId}+'\')'" >Active - <span th:text="${taskCount.active}"></span></button></a></th>
+                    
+                    <th><a href="#"><button th:onclick="'javascript:listDueTask(\''+${projectId}+'\')'" >Due today - <span th:text="${taskCount.due}"></span></button></a></th>
+                    
+                    <th><a href="#"><button th:onclick="'javascript:listLateTask(\''+${projectId}+'\')'" >Late - <span th:text="${taskCount.late}"></span></button></a></th>
+                    
+                    <th><a href="#"><button th:onclick="'javascript:listCompletedTask(\''+${projectId}+'\')'" >Completed - <span th:text="${taskCount.completed}"></span></button></a></th>
+                
+                </tr>
+                
+                <tr th:if="${memberId != null}">
+                    
+                    <th><a href="#"><button th:onclick="'javascript:listActiveTask(\''+${projectId}+'\',\''+ ${memberId} +'\')'" >Active - <span th:text="${taskCount.active}"></span></button></a></th>
+                    
+                    <th><a href="#"><button th:onclick="'javascript:listDueTask(\''+${projectId}+'\',\''+ ${memberId}+'\')'" >Due today - <span th:text="${taskCount.due}"></span></button></a></th>
+                    
+                    <th><a href="#"><button th:onclick="'javascript:listLateTask(\''+${projectId}+'\',\''+ ${memberId}+'\')'" >Late - <span th:text="${taskCount.late}"></span></button></a></th>
+                    
+                    <th><a href="#"><button th:onclick="'javascript:listCompletedTask(\''+${projectId}+'\',\''+ ${memberId}+'\')'" >Completed - <span th:text="${taskCount.completed}"></span></button></a></th>
+                
+                </tr>
+                
+            </thead>
+            
+            <tbody th:unless="${#lists.isEmpty(tasks)}">
+                
+                <tr th:each="task : ${tasks}">
+                    
+                    <td colspan="2"><a href="#" th:onclick="'javascript:showTaskInfo(\''+${task.id}+'\')'" th:text="${task.title}">task title</a></td>
+                    
+                    <td th:if="${projectId == 0}" th:text="${task.project.name}"></td>
+                    
+                    <td th:if="${projectId != 0}" th:text="${task.assignedTo.name}"></td>
+                    
+                    <td><span th:text="${#dates.format(task.expectedEndDate, 'dd-MMM-yyyy HH:mm aa')}" >date</span><span th:if="${task.expectedEndDate == null}" th:text="${task.expectedTimeInHours}"></span></td>
+                    
+               </tr>
+            
+            </tbody>
+        
+        </table>
+        
+        <div th:if="${projectId != 0}" id="task-form" class="task-form"  style="display:none;">
+		 		
+			<form id="taskForm" action="#"  th:action="@{/task/create}" th:object="${newTask}"  method="post">
+	 
+		        <fieldset>
+		          
+		        	<legend>Create Task</legend>
+					
+					<div>
+		            
+		            	<label class="fields" for="title"><span>Title</span></label>
+		            
+		            	<input type="text" th:field="*{title}"  placeholder="title for task" required="required" />
+		          	
+		          	</div>
+		          
+		          	<div>
+		            
+		            	<label class="fields" for="description"><span>Description</span></label>
+		            
+		            	<textarea type="text" th:field="*{description}" placeholder="Description" ></textarea>
+		          
+		          	</div>
+		          	
+		          	<div>
+		            
+		            	<label class="fields" for="assignedTo"><span>Assigned To</span></label>
+		            
+		            	<select th:field="*{assignedTo}" required="required">
+		            		
+		            		<option value="" >Please Select</option>
+		            		<option th:each="user : ${users}" th:value="${user.id}"> <span th:text="${user.name}"></span> </option>
+		            		
+		            	</select>
+		          
+		          	</div>
+		          	
+		          	<div>
+		            
+		            	<label class="fields" for="taskType"><span>Task Type</span></label>
+		            
+		            	<select th:field="*{taskType}" required="required">
+		            		
+		            		<option value="" >Please Select</option>
+		            		<option th:each="type : ${taskTypes}" th:value="${type}"> <span th:text="${type.titleCase(type.name())}"></span> </option>
+		            		
+		            	</select>
+		          
+		          	</div>
+		          	
+		          	<div>
+		            
+		            	<label class="fields" for="priority"><span>Priority</span></label>
+		            
+		            	<select th:field="*{priority}">
+		            		
+		            		<option th:each="priority : ${priorities}" th:value="${priority}"> <span th:text="${priority.titleCase(priority.name())}"></span> </option>
+		            		
+		            	</select>
+		          
+		          	</div>
+		          	
+		          	<div>
+		            
+		            	<label class="fields"><span>Expected Dates</span></label>
+		            
+		            	Start : <input type="text" th:field="*{expectedStartDate}"  placeholder="select expected start date" required="required" /> End : <input type="text" th:field="*{expectedEndDate}"  placeholder="select expected end date" required="required" />
+		            	
+		          	</div>
+		          	
+	
+		          	<div>
+		            
+		            	<label class="fields"><span>Expected Time</span></label>
+		            
+		            	Hours : <input type="text" th:field="*{expectedTimeInHours}"  placeholder="enter expected time" required="required" />
+		            	
+		          	</div>
+		          	
+		          	<div class="submit">
+		          
+		            	<input type="hidden" name="project" id="project" th:value="${projectId}" />
+		            
+		            	<button type="button" th:onclick="'javascript:submitTaskForm()'" name="create">Create</button>
+		            
+		            	<button type="button" th:onclick="'javascript:unblockUI()'">X</button>    
+		          
+		          	</div>
+		        
+	        	</fieldset>
+	          
+	     		</form>
+				
+				<script type="text/javascript">
+	     	
+		    		$(document).ready(function() {
+			     		
+		    			$( "#expectedStartDate" ).datetimepicker({
+		    			      timeFormat: "hh:mm TT",
+		    				  changeMonth: true,
+		    			      numberOfMonths: 2,
+		    			      onClose: function( selectedDate ) {
+		    			        $( "#expectedEndDate" ).datepicker( "option", "minDate", selectedDate );
+		    			      }
+		    			    });
+		    			
+		    			$( "#expectedEndDate" ).datetimepicker({
+		    				  timeFormat: "hh:mm TT",
+		    			      changeMonth: true,
+		    			      numberOfMonths: 2,
+		    			      onClose: function( selectedDate ) {
+		    			        $( "#expectedStartDate" ).datepicker( "option", "maxDate", selectedDate );
+		    			      }
+		    			    });
+		    			
+		    			
+		    			/* task form validation */
+				    	$("#taskForm").validate({
+							rules: {
+								title: {
+					    	      required: true
+					    	    },
+					    	    assignedTo: {
+					    	    	required: true
+					    	    },
+					    	    taskType: {
+					    	    	required: true
+					    	    },
+					    	    expectedStartDate:{
+					    	    	required: {
+					    	            depends: function(element){
+					    	                return $("#expectedTimeInHours").val() == ""
+					    	            }
+					    	    	}
+					    	    },
+					    	    expectedEndDate:{
+					    	    	required: {
+					    	            depends: function(element){
+					    	                return $("#expectedStartDate").val() != ""
+					    	            }
+					    	    	}
+					    	    },
+					    	    expectedTimeInHours:{
+					    	    	required: {
+					    	            depends: function(element){
+					    	                return $("#expectedStartDate").val() == ""
+					    	            }
+					    	    	}
+					    	    }
+					    	    
+					    	},
+							messages: {
+					    	    title: {
+					    	      required: ""
+					    	    },
+					    	    assignedTo:{
+					    	    	required: "Select team member"
+					    	    },
+					    	    taskType: {
+					    	    	required: "Select task type"
+					    	    },
+					    	    expectedStartDate:{
+					    	    	required: ""
+					    	    },
+					    	    expectedEndDate:{
+					    	    	required: ""
+					    	    },
+					    	    expectedTimeInHours:{
+					    	    	required: ""
+					    	    }
+							}
+						});
+		    			
+				    });
+		    		
+				</script>
+				
+		</div>
+    
+    </div>
+    
+</body>
+
+</html>

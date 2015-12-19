@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head></head>
+
+<body>
+    
+    <div th:fragment="UpdateProjectForm" class="tasklist">
+        
+    	<form id="UpdateProjectForm" action="#"  th:action="@{/project/update}" th:object="${project}"  method="post">
+	 
+		        <fieldset>
+		          
+		        	<legend>Update Project</legend>
+					
+					<div>
+		            
+		            	<label class="fields" for="name"><span>Name</span></label>
+		            
+		            	<input type="text" th:field="*{name}"  placeholder="Name for Project" required="required" />
+		          	
+		          	</div>
+		          
+		          	<div>
+		            
+		            	<label class="fields" for="description"><span>Description</span></label>
+		            
+		            	<textarea type="text" th:field="*{description}" placeholder="Description" ></textarea>
+		          
+		          	</div>
+		          	
+		          	<div>
+		            
+		            	<label class="fields" for="team"><span>Team</span></label>
+		            
+		            	<select th:field="*{team}" style="height:100px" required="required" multiple="multiple" >
+		            		
+		            		<option th:each="user : ${allUser}" th:value="${user.id}"> <span th:text="${user.name}"></span> </option>
+		            		
+		            	</select>
+		          
+		          	</div>
+		          	
+		          	<div>
+		            
+		            	<label class="fields" for="status"><span>Status</span></label>
+		            
+		            	<select th:field="*{status}" required="required">
+		            		
+		            		<option th:each="status : ${projectStatus}" th:value="${status}"> <span th:text="${status.titleCase(status.name())}"></span> </option>
+		            		
+		            	</select>
+		          
+		          	</div>
+		          	
+		          	<div>
+		            
+		            	<label class="fields" for="repositoryName"><span>Repository Name</span></label>
+		            
+		            	<select th:field="*{repositoryName}" >
+		            		
+		            		<option value="">None</option>
+		            		
+		            		<option th:each="repository : ${projectRepositories}" th:value="${repository}"> <span th:text="${repository.titleCase(repository.name())}"></span> </option>
+		            		
+		            	</select>
+		          
+		          	</div>
+		          	
+		          	<div>
+		            
+		            	<label class="fields" for="repositoryUrl"><span>Repository URL</span></label>
+		            
+		            	<input type="text" th:field="*{repositoryUrl}"  placeholder="Repository Url" />
+		          	
+		          	</div>
+		          	
+		          	<div>
+		            
+		            	<label class="fields" for="repositoryUsername"><span>Repository Username</span></label>
+		            
+		            	<input type="text" th:field="*{repositoryUsername}"  placeholder="Repository Username" />
+		          	
+		          	</div>
+		          	
+		          	<div>
+		            
+		            	<label class="fields" for="repositoryPassword"><span>Repository Password</span></label>
+		            
+		            	<input type="text" th:field="*{repositoryPassword}"  placeholder="Repository Password" />
+		          	
+		          	</div>
+		          	
+		          	<div class="submit">
+		          	
+		          		<input type="hidden" th:field="*{id}" />
+		          		
+		          		<button type="button" th:onclick="'javascript:submitUpdateProjectForm()'" name="edit">Edit</button>
+		            
+		            	<button type="button" th:onclick="'javascript:unblockUI()'">X</button>    
+		          
+		          	</div>
+		        
+	        	</fieldset>
+	          
+	     		</form>
+				
+				<script type="text/javascript">
+	     	
+		    		$(document).ready(function() {
+			     		
+		    			/* task form validation */
+				    	$("#UpdateProjectForm").validate({
+							rules: {
+								name: {
+					    	      required: true
+					    	    },
+					    	    team: {
+					    	      required: true
+					    	    },
+					    	    status: {
+					    	      required: true
+					    	    },
+					    	    repositoryUrl: {
+					    	        required: {
+					    	            depends: function(element){
+					    	                return $("#repositoryName").val()!=""
+					    	            }
+					    	        }
+					    	    },
+					    	    repositoryUsername: {
+					    	        required: {
+					    	            depends: function(element){
+					    	                return $("#repositoryName").val()!=""
+					    	            }
+					    	        }
+					    	    },
+					    	    repositoryPassword: {
+					    	        required: {
+					    	            depends: function(element){
+					    	                return $("#repositoryName").val()!=""
+					    	            }
+					    	        }
+					    	    }
+					    	},
+							messages: {
+					    	    name: {
+					    	      required: ""
+					    	    },
+				    	    	team: {
+					    	      required: "please select team members"
+					    	    },
+					    	    status: {
+					    	      required: "please select status"
+					    	    },
+					    	    repositoryUrl: {
+					    	      required: ""
+					    	    },
+					    	    repositoryUsername: {
+					    	      required: ""
+					    	    },
+					    	    repositoryPassword: {
+					    	      required: ""
+					    	    }
+							}
+						});
+		    			
+				    });
+		    		
+			</script>    	
+				
+	</div>
+    
+</body>
+
+</html>

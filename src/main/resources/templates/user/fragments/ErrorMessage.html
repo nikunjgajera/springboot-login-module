@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head></head>
+
+<body>
+    
+    <div th:fragment="ErrorMessage" >
+      
+		<ul th:if="${error != null}" class="errorlist">
+			            
+        	<li th:text="#{${error}}">Error</li>
+        	
+       	</ul>
+		
+    </div>
+    
+</body>
+
+</html>

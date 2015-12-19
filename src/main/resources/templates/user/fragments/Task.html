@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head></head>
+
+<body>
+    
+    <div th:fragment="Task" th:unless="${#lists.isEmpty(task)}" class="tasklist">
+        
+        <table>
+            
+            <thead>
+                
+                <tr>
+                    
+                    <th>Task Information<a href="#" th:onclick="'javascript:editTaskForm(\''+ ${taskId} +'\')'" ><button>Edit</button></a></th>
+                    
+                </tr>
+                
+            </thead>
+            
+            <tbody>
+                
+                <tr>
+                    
+                    <td colspan="4">Title : <span th:text="${task.title}"></span></td>
+                    
+               	</tr>
+               	
+               	<tr>
+                    
+                    <td colspan="4">Description : <span th:text="${task.description}"></span></td>
+                    
+               	</tr>
+               	
+               	<tr>
+                    
+                    <td colspan="4">Assigned To : <span th:text="${task.assignedTo.name}"></span></td>
+                    
+               	</tr>
+               	
+               	<tr>
+                    
+                    <td colspan="4">Status : <span th:text="${task.status}"></span></td>
+                    
+               	</tr>
+               	
+               	<tr>
+                    
+                    <td colspan="4">Expected Start Date : <span th:text="${#dates.format(task.expectedStartDate, 'dd-MMM-yyyy HH:mm aa')}" ></span></td>
+                    
+               	</tr>
+               	
+               	<tr>
+                    
+                    <td colspan="4">Expected End Date : <span th:text="${#dates.format(task.expectedEndDate, 'dd-MMM-yyyy HH:mm aa')}" ></span></td>
+                    
+               	</tr>
+               	
+               	<tr>
+                    
+                    <td colspan="4">Expected Time In Hours : <span th:text="${task.expectedTimeInHours}"></span></td>
+                    
+               	</tr>
+               	
+               	<tr>
+                    
+                    <td colspan="4">Assigned By : <span th:text="${task.assignedBy.name}"></span></td>
+                    
+               	</tr>
+            
+            </tbody>
+        
+        </table>
+        
+        <div id="update-task-form" class="update-task-form" style="display:none;">
+        	
+        </div>
+            
+    </div>
+    
+</body>
+
+</html>

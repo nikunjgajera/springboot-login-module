@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head></head>
+
+<body>
+    
+    <div th:fragment="UpdateTaskForm" class="tasklist">
+        
+        	<form id="UpdateTaskForm" action="#"  th:action="@{/task/update}" th:object="${task}"  method="post">
+	 
+		        <fieldset>
+		          
+		        	<legend>Update Task</legend>
+					
+					<div>
+		            
+		            	<label class="fields" for="title"><span>Title</span></label>
+		            
+		            	<input type="text" th:field="*{title}"  placeholder="title for task" required="required" />
+		          	
+		          	</div>
+		          
+		          	<div>
+		            
+		            	<label class="fields" for="description"><span>Description</span></label>
+		            
+		            	<textarea type="text" th:field="*{description}" placeholder="Description" ></textarea>
+		          
+		          	</div>
+		          	
+		          	<div>
+		            
+		            	<label class="fields" for="assignedTo"><span>Assigned To</span></label>
+		            
+		            	<select th:field="*{assignedTo}" required="required">
+		            		
+		            		<option value="" >Please Select</option>
+		            		<option th:each="user : ${users}" th:value="${user.id}"> <span th:text="${user.name}"></span> </option>
+		            		
+		            	</select>
+		          
+		          	</div>
+		          	
+		          	<div>
+		            
+		            	<label class="fields" for="taskType"><span>Task Type</span></label>
+		            
+		            	<select th:field="*{taskType}" required="required">
+		            		
+		            		<option value="" >Please Select</option>
+		            		<option th:each="type : ${taskTypes}" th:value="${type}"> <span th:text="${type.titleCase(type.name())}"></span> </option>
+		            		
+		            	</select>
+		          
+		          	</div>
+		          	
+		          	<div>
+		            
+		            	<label class="fields" for="priority"><span>Priority</span></label>
+		            
+		            	<select th:field="*{priority}">
+		            		
+		            		<option th:each="priority : ${priorities}" th:value="${priority}"> <span th:text="${priority.titleCase(priority.name())}"></span> </option>
+		            		
+		            	</select>
+		          
+		          	</div>
+		          	
+		          	<div>
+		            
+		            	<label class="fields"><span>Expected Dates</span></label>
+		            
+		            	Start : <input type="text" th:field="*{expectedStartDate}" id="editExpectedStartDate" placeholder="select expected start date" required="required" /> End : <input type="text" th:field="*{expectedEndDate}" id="editExpectedEndDate"  placeholder="select expected end date" required="required" />
+		            	
+		          	</div>
+		          	
+	
+		          	<div>
+		            
+		            	<label class="fields"><span>Expected Time</span></label>
+		            
+		            	Hours : <input type="text" th:field="*{expectedTimeInHours}"  placeholder="enter expected time" required="required" />
+		            	
+		          	</div>
+		          	
+		          	<div class="submit">
+		          		
+		          		<input type="hidden" th:field="*{id}" />
+		          		
+		          		<input type="hidden" th:field="*{assignedBy.id}" />
+		          		
+		          		<input type="hidden" th:field="*{project.id}" />
+		          		
+		            	<button type="button" th:onclick="'javascript:submitUpdateTaskForm()'" name="edit">Edit</button>
+		            
+		            	<button type="button" th:onclick="'javascript:unblockUI()'">X</button>    
+		          
+		          	</div>
+		        
+	        	</fieldset>
+	          
+	     		</form>
+				
+				<script type="text/javascript">
+	     	
+		    		$(document).ready(function() {
+			     		
+		    			$( "#editExpectedStartDate" ).datetimepicker({
+		    			      timeFormat: "hh:mm TT",
+		    				  changeMonth: true,
+		    			      numberOfMonths: 2,
+		    			      onClose: function( selectedDate ) {
+		    			        $( "#editExpectedEndDate" ).datepicker( "option", "minDate", selectedDate );
+		    			      }
+		    			    });
+		    			
+		    			$( "#editExpectedEndDate" ).datetimepicker({
+		    				  timeFormat: "hh:mm TT",
+		    			      changeMonth: true,
+		    			      numberOfMonths: 2,
+		    			      onClose: function( selectedDate ) {
+		    			        $( "#editExpectedStartDate" ).datepicker( "option", "maxDate", selectedDate );
+		    			      }
+		    			    });
+		    			
+		    			
+		    			/* task form validation */
+				    	$("#UpdateTaskForm").validate({
+							rules: {
+								title: {
+					    	      required: true
+					    	    },
+					    	    assignedTo: {
+					    	    	required: true
+					    	    },
+					    	    taskType: {
+					    	    	required: true
+					    	    },
+					    	    expectedStartDate:{
+					    	    	required: {
+					    	            depends: function(element){
+					    	                return $("#expectedTimeInHours").val() == ""
+					    	            }
+					    	    	}
+					    	    },
+					    	    expectedEndDate:{
+					    	    	required: {
+					    	            depends: function(element){
+					    	                return $("#editExpectedStartDate").val() != ""
+					    	            }
+					    	    	}
+					    	    },
+					    	    expectedTimeInHours:{
+					    	    	required: {
+					    	            depends: function(element){
+					    	                return $("#editExpectedStartDate").val() == ""
+					    	            }
+					    	    	}
+					    	    }
+					    	    
+					    	},
+							messages: {
+					    	    title: {
+					    	      required: ""
+					    	    },
+					    	    assignedTo:{
+					    	    	required: "Select team member"
+					    	    },
+					    	    taskType: {
+					    	    	required: "Select task type"
+					    	    },
+					    	    expectedStartDate:{
+					    	    	required: ""
+					    	    },
+					    	    expectedEndDate:{
+					    	    	required: ""
+					    	    },
+					    	    expectedTimeInHours:{
+					    	    	required: ""
+					    	    }
+							}
+						});
+		    			
+				    });
+		    		
+				</script>
+				
+		</div>
+    
+</body>
+
+</html>
